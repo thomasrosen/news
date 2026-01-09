@@ -53,5 +53,13 @@ export const remarkExtractTitle: Plugin<[], Root> = () => {
         }
       })
     }
+
+    // Remove the original title heading
+    tree.children = tree.children.filter((node) => {
+      if (node.type === 'heading' && node.depth === 1) {
+        return false;
+      }
+      return true;
+    });
   };
 };

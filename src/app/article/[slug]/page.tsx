@@ -1,4 +1,6 @@
+import { formatDate } from '@/lib/formatDate';
 import { getContentFilenames, getOneArticle } from '@/lib/getArticles';
+import { notFound } from 'next/navigation';
 
 export const dynamicParams = false // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
 
@@ -23,9 +25,48 @@ export default async function Page({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const { ArticleComponent } = await getOneArticle({ slug }) || {}
 
-  return <ArticleComponent />
+  const article = await getOneArticle({ slug })
+  if (!article) {
+    notFound()
+  }
+
+  const { ArticleComponent, metadata } = article
+
+  return <section>
+    <script
+      type="application/ld+json"
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: metadata.title,
+          datePublished: metadata.publishedAt,
+          dateModified: metadata.publishedAt,
+          description: metadata.description,
+          // image: metadata.image,
+          // url: `${baseUrl}/blog/${metadata.slug}`,
+          // author: {
+          //   '@type': 'Person',
+          //   name: metadata.author || 'Unknown Author',
+          // },
+        }),
+      }}
+    />
+
+      <h1 className="title font-semibold text-2xl tracking-tighter">
+        {metadata.title}
+      </h1>
+      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {formatDate(metadata.publishedAt)}
+        </p>
+      </div>
+      <article className="prose">
+        <ArticleComponent />
+      </article>
+  </section>
 }
 
 
