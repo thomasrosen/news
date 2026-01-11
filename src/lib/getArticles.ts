@@ -1,3 +1,4 @@
+import { baseUrl } from '@/app/sitemap';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -37,8 +38,6 @@ export async function getOneArticle({ slug }: {slug: string}) {
 async function importAndParseArticle({ slug }: {slug: string}) {
   try {
     const { title = '', metadata, default: ArticleComponent } = await import(`@@/content/${slug}.mdx`)
-
-    const baseUrl = '' // website base url
 
     const publishedAt = metadata?.publishedAt || new Date().toISOString()
     const description = metadata?.summary || ''
