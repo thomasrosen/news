@@ -1,6 +1,6 @@
 import { getAllArticles } from '@/lib/getArticles'
 
-export const baseUrl = 'https://portfolio-blog-starter.vercel.app'
+export const baseUrl = 'https://news.thomasrosen.me'
 
 export default async function sitemap() {
   let articles = (await getAllArticles())
