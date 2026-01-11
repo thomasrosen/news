@@ -26,7 +26,7 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
-            cd ~/news/ && git checkout main && git pull && npm install && supervisorctl restart news;
+            cd ~/news/ && git checkout main && git pull && npm install && npm run build && supervisorctl restart news;
           host: giclas.uberspace.de
           username: qiekub
           password: ${{ secrets.UBERSPACE_PASSWORD_QIEKUB }}
