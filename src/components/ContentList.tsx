@@ -1,9 +1,9 @@
 import { formatDate } from '@/lib/formatDate'
-import { getAllArticles } from '@/lib/getArticles'
+import { getAllContentFiles } from '@/lib/getAllContentFiles'
 import Link from 'next/link'
 
-export async function ArticleList() {
-  const allArticles = await getAllArticles()
+export async function ContentList({ subpath }: { subpath: string }) {
+  const allArticles = await getAllContentFiles({ subpath })
 
   return (
     <div className="flex flex-col gap-4">
@@ -20,7 +20,7 @@ export async function ArticleList() {
           return <Link
             key={article.metadata.slug}
             className="flex flex-col space-y-1"
-            href={`/article/${article.metadata.slug}`}
+            href={`/${subpath}/${article.metadata.slug}`}
           >
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
               <p className="shrink-0 text-neutral-600 dark:text-neutral-400 w-[100px] tabular-nums">

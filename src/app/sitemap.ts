@@ -1,9 +1,8 @@
-import { getAllArticles } from '@/lib/getArticles'
-
-export const baseUrl = 'https://news.thomasrosen.me'
+import { baseUrl } from '@/constants';
+import { getAllContentFiles } from '@/lib/getAllContentFiles';
 
 export default async function sitemap() {
-  let articles = (await getAllArticles())
+  let articles = (await getAllContentFiles({ subpath: 'articles' }))
   .map((article) => ({
     url: `${baseUrl}/article/${article.metadata.slug}`,
     lastModified: article.metadata.publishedAt,

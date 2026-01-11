@@ -1,0 +1,83 @@
+import { possible_subpaths } from '@/constants';
+import { addOpenGraphMetadataForArticle } from '@/lib/addOpenGraphMetadataForArticle';
+import { formatDate } from '@/lib/formatDate';
+import { getContentFilenames } from '@/lib/getContentFilenames';
+import { getOneContentFile } from '@/lib/getOneContentFile';
+import { notFound } from 'next/navigation';
+
+export const dynamicParams = false // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
+
+export async function generateStaticParams() {
+  const staticParams = []
+
+  const extension = '.mdx' // Markdown files
+  for (const subpath of possible_subpaths) {
+    const files = await getContentFilenames({ subpath })
+    console.log('files', files)
+    staticParams.push(...files.map((file) => ({ subpath, slug: file.replace(extension, '') })))
+  }
+
+  return staticParams
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ subpath: string, slug: string }> }) {
+  const { slug, subpath } = await params
+  const { metadata } = await getOneContentFile({ slug, subpath }) || {}
+
+  if (!metadata) {
+    return null
+  }
+
+  if (subpath === 'articles') {
+    return await addOpenGraphMetadataForArticle({ metadata })
+  }
+
+  return metadata
+}
+
+export default async function Page({ params }: { params: Promise<{ subpath: string, slug: string }> }) {
+  const { slug, subpath } = await params
+
+  const article = await getOneContentFile({ slug, subpath })
+  console.log('article', article)
+  if (!article) {
+    notFound()
+  }
+
+  const { ContentComponent, metadata } = article
+
+  return <section>
+    <script
+      type="application/ld+json"
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: metadata.title,
+          datePublished: metadata.publishedAt,
+          dateModified: metadata.publishedAt,
+          description: metadata.description,
+          // image: metadata.coverphoto,
+          // url: `${baseUrl}/articles/${metadata.slug}`,
+          // author: {
+          //   '@type': 'Person',
+          //   name: metadata.author || 'Unknown Author',
+          // },
+        }),
+      }}
+    />
+
+      <h1 className="title font-semibold text-2xl tracking-tighter">
+        {metadata.title}
+      </h1>
+      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {formatDate(metadata.publishedAt)}
+        </p>
+      </div>
+      <article className="prose">
+        <ContentComponent />
+      </article>
+  </section>
+}

@@ -1,8 +1,8 @@
-import { baseUrl } from '@/app/sitemap'
-import { getAllArticles } from '@/lib/getArticles'
+import { baseUrl } from '@/constants';
+import { getAllContentFiles } from '@/lib/getAllContentFiles';
 
 export async function GET() {
-  const allBlogs = await getAllArticles()
+  const allBlogs = await getAllContentFiles({ subpath: 'articles' })
 
   const itemsXml = allBlogs
     .sort((a, b) => {
