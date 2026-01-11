@@ -13,7 +13,6 @@ export async function generateStaticParams() {
   const extension = '.mdx' // Markdown files
   for (const subpath of possible_subpaths) {
     const files = await getContentFilenames({ subpath })
-    console.log('files', files)
     staticParams.push(...files.map((file) => ({ subpath, slug: file.replace(extension, '') })))
   }
 
@@ -39,7 +38,6 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
   const { slug, subpath } = await params
 
   const article = await getOneContentFile({ slug, subpath })
-  console.log('article', article)
   if (!article) {
     notFound()
   }
