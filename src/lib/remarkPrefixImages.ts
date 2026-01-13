@@ -6,7 +6,7 @@ export const remarkPrefixImages: Plugin<[], Root> = () => {
   return (tree: Root) => {
     visit(tree, 'image', (node) => {
       if (node.url) {
-        node.url = `@@/content/media/${node.url}`
+        node.url = `/content/media/${node.url}`
         return false;
       }
     })
