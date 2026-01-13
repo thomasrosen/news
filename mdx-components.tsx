@@ -7,19 +7,24 @@ import Image, { ImageProps } from 'next/image'
 // components from other libraries, and more.
 
 const components = {
-  // Allows customizing built-in components, e.g. to add styling.
-  h1: ({ children }) => (
-    <h1 className="text-red-500">{children}</h1>
+  h2: ({ children }) => (
+    <h2 className="text-2xl font-bold mt-8 my-2">{children}</h2>
   ),
-  img: (props) => (
-    <Image
+  h3: ({ children }) => (
+    <h3 className="text-xl font-bold mt-8 my-2">{children}</h3>
+  ),
+  p: ({ children }) => (
+    <p className="my-2">{children}</p>
+  ),
+  img: async (props) => {
+    return <Image
       sizes="100vw"
-      className="w-full h-auto my-4 rounded"
+      className="w-full h-auto my-4"
       {...(props as ImageProps)}
     />
-  ),
+  },
   li: ({ children }) => (
-    <li className="text-green-500">{children}</li>
+    <li>{children}</li>
   ),
   ul: ({ children }) => (
     <ul>{children}</ul>

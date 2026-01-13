@@ -2,6 +2,7 @@ import { remarkExtractTitle } from '@/lib/remarkExtractTitle';
 import createMDX from '@next/mdx';
 import type { NextConfig } from "next";
 import rehypeExternalLinks from 'rehype-external-links';
+import rehypeMdxImportMedia from 'rehype-mdx-import-media';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
@@ -22,6 +23,7 @@ const withMDX = createMDX({
       remarkExtractTitle,
     ],
     rehypePlugins: [
+      [rehypeMdxImportMedia, { resolve: false }],
       [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer', 'nofollow'] }]
     ],
   },
