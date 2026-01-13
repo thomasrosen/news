@@ -20,7 +20,7 @@ export async function importAndParseContentFile({ slug, subpath }: { slug: strin
         title,
         description: metadata?.summary || '',
         coverphoto,
-        coverphotoImported: null, // coverphotoResolved,
+        coverphotoImported: coverphotoResolved,
       },
     }
   } catch (error) {
