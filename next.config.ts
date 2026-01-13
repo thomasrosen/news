@@ -2,7 +2,6 @@ import { remarkExtractTitle } from '@/lib/remarkExtractTitle';
 import { remarkPrefixImages } from '@/lib/remarkPrefixImages';
 import createMDX from '@next/mdx';
 import type { NextConfig } from "next";
-import path from 'path';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeMdxImportMedia from 'rehype-mdx-import-media';
 import remarkFrontmatter from 'remark-frontmatter';
@@ -16,15 +15,12 @@ let nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  webpack: (config) => {
-    console.log('__dirname', __dirname)
-    console.log('path.resolve(__dirname)', path.resolve(__dirname))
-
-    // config.resolve.alias['@@'] = path.resolve('./'); // Maps @@ to project root
-    // Or for your tsconfig paths:
-    config.resolve.alias['@@'] = path.resolve(__dirname);
-    return config;
-  },
+  // webpack: (config) => {
+  //   // config.resolve.alias['@@'] = path.resolve('./'); // Maps @@ to project root
+  //   // Or for your tsconfig paths:
+  //   // config.resolve.alias['@@'] = path.resolve(__dirname);
+  //   return config;
+  // },
 }
 
 const withMDX = createMDX({
