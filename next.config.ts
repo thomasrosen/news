@@ -17,9 +17,12 @@ let nextConfig: NextConfig = {
     unoptimized: true,
   },
   webpack: (config) => {
-    config.resolve.alias['@@'] = path.resolve('./'); // Maps @@ to project root
+    console.log('__dirname', __dirname)
+    console.log('path.resolve(__dirname)', path.resolve(__dirname))
+
+    // config.resolve.alias['@@'] = path.resolve('./'); // Maps @@ to project root
     // Or for your tsconfig paths:
-    // config.resolve.alias['@@'] = path.resolve(__dirname);
+    config.resolve.alias['@@'] = path.resolve(__dirname);
     return config;
   },
 }
