@@ -3,7 +3,7 @@ import { remarkPrefixImages } from '@/lib/remarkPrefixImages';
 import createMDX from '@next/mdx';
 import type { NextConfig } from "next";
 import rehypeExternalLinks from 'rehype-external-links';
-import rehypeMdxImportMedia from 'rehype-mdx-import-media';
+// import rehypeMdxImportMedia from 'rehype-mdx-import-media';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
@@ -28,7 +28,7 @@ const withMDX = createMDX({
       remarkPrefixImages,
     ],
     rehypePlugins: [
-      [rehypeMdxImportMedia, { resolve: false }],
+      // [rehypeMdxImportMedia, { resolve: false }],
       [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer', 'nofollow'] }]
     ],
   },
