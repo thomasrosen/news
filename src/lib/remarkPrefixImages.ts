@@ -1,7 +1,7 @@
-import { getRootPath } from '@/lib/getRootPath'
 import type { Root } from 'mdast'
 import type { Plugin } from 'unified'
 import { visit } from 'unist-util-visit'
+import { getRootPath } from './getRootPath'
 
 export const remarkPrefixImages: Plugin<[], Root> = () => {
   return (tree: Root) => {
