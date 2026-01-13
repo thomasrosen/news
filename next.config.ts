@@ -1,4 +1,5 @@
 import { remarkExtractTitle } from '@/lib/remarkExtractTitle';
+import { remarkPrefixImages } from '@/lib/remarkPrefixImages';
 import createMDX from '@next/mdx';
 import type { NextConfig } from "next";
 import rehypeExternalLinks from 'rehype-external-links';
@@ -21,6 +22,7 @@ const withMDX = createMDX({
       [remarkFrontmatter, {type: 'yaml', marker: '-'}],
       [remarkMdxFrontmatter, { name: 'metadata' }],
       remarkExtractTitle,
+      remarkPrefixImages,
     ],
     rehypePlugins: [
       [rehypeMdxImportMedia, { resolve: false }],

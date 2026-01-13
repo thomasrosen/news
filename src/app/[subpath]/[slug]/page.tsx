@@ -3,6 +3,7 @@ import { addOpenGraphMetadataForArticle } from '@/lib/addOpenGraphMetadataForArt
 import { formatDate } from '@/lib/formatDate';
 import { getContentFilenames } from '@/lib/getContentFilenames';
 import { getOneContentFile } from '@/lib/getOneContentFile';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 export const dynamicParams = false // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
@@ -65,6 +66,17 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
         }),
       }}
     />
+
+      {
+        metadata.coverphotoImported
+          ? <Image
+            alt=""
+            src={metadata.coverphotoImported}
+            sizes="100vw"
+            className="w-full h-auto my-4"
+          />
+          : null
+      }
 
       <h1 className="title font-semibold text-2xl tracking-tighter">
         {metadata.title}

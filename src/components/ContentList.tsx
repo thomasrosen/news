@@ -1,5 +1,6 @@
 import { formatDate } from '@/lib/formatDate'
 import { getAllContentFiles } from '@/lib/getAllContentFiles'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export async function ContentList({ subpath }: { subpath: string }) {
@@ -19,13 +20,25 @@ export async function ContentList({ subpath }: { subpath: string }) {
         .map((article) => {
           return <Link
             key={article.metadata.slug}
-            className="flex flex-col space-y-1"
+            className="flex flex-col space-y-0"
             href={`/${subpath}/${article.metadata.slug}`}
           >
+            <span className="text-neutral-600 dark:text-neutral-400 shrink-0 tabular-nums">
+              {formatDate(article.metadata.publishedAt, false)}
+            </span>
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
-              <p className="shrink-0 text-neutral-600 dark:text-neutral-400 w-[100px] tabular-nums">
-                {formatDate(article.metadata.publishedAt, false)}
-              </p>
+              {
+                article.metadata.coverphotoImported
+                  ? <div className="relative w-16 h-16 my-1 shrink-0">
+                    <Image
+                      alt=""
+                      src={article.metadata.coverphotoImported}
+                      sizes="64px"
+                      fill={true}
+                    />
+                  </div>
+                  : null
+              }
               <p className="flex flex-col gap-0 text-neutral-900 dark:text-neutral-100 tracking-tight">
                 <strong>{article.metadata.title || 'Untitled'}</strong>
                 {article.metadata.description || null}
