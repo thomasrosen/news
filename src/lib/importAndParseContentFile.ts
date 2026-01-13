@@ -7,7 +7,7 @@ export async function importAndParseContentFile({ slug, subpath }: { slug: strin
     const coverphoto = metadata?.coverphoto || null
     // let coverphotoResolved: StaticImageData | null = null
     // if (coverphoto) {
-    //   const { default: coverphotoResolvedTmp } = await import(`@@/content/media/${coverphoto}`)
+    //   const { default: coverphotoResolvedTmp } = await import(`${getRootPath()}/content/media/${coverphoto}`)
     //   coverphotoResolved = coverphotoResolvedTmp
     // }
 
