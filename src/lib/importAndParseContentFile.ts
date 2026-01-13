@@ -1,15 +1,17 @@
 import { ContentMetadata } from "@/types/ContentMetadata";
+import { StaticImageData } from "next/image";
+import { getRootPath } from "./getRootPath";
 
 export async function importAndParseContentFile({ slug, subpath }: { slug: string, subpath: string }): Promise<null | { ContentComponent: React.ElementType, metadata: ContentMetadata}> {
   try {
     const { title = '', metadata = {}, default: ContentComponent } = await import(`@@/content/${subpath}/${slug}.mdx`)
 
     const coverphoto = metadata?.coverphoto || null
-    // let coverphotoResolved: StaticImageData | null = null
-    // if (coverphoto) {
-    //   const { default: coverphotoResolvedTmp } = await import(`${getRootPath()}/content/media/${coverphoto}`)
-    //   coverphotoResolved = coverphotoResolvedTmp
-    // }
+    let coverphotoResolved: StaticImageData | null = null
+    if (coverphoto) {
+      const { default: coverphotoResolvedTmp } = await import(`${getRootPath()}/content/media/${coverphoto}`)
+      coverphotoResolved = coverphotoResolvedTmp
+    }
 
     return {
       ContentComponent,
