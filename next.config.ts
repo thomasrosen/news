@@ -34,7 +34,7 @@ const withMDX = createMDX({
       remarkPrefixImages,
     ],
     rehypePlugins: [
-      [rehypeMdxImportMedia, { resolve: false }],
+      [rehypeMdxImportMedia, { resolve: true }],
       [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer', 'nofollow'] }]
     ],
   },
