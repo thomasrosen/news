@@ -8,7 +8,6 @@ export const remarkPrefixImages: Plugin<[], Root> = () => {
       if (node.url) {
         // node.url = `@@/content/media/${node.url}`
         node.url = `/api/images/${node.url}`
-        console.log('node.url', node.url)
         return false;
       }
     })
