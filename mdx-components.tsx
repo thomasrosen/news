@@ -1,5 +1,6 @@
 import { MapCard } from "@/components/map/MapCard";
 import { MarkerPoint } from "@/components/map/MarkerPoint";
+import { Card } from "@/components/ui/card";
 import imageLoader from '@/lib/image-loader';
 import type { MDXComponents } from 'mdx/types';
 import Image, { ImageProps } from 'next/image';
@@ -37,7 +38,11 @@ const components = {
   ol: ({ children }) => (
     <ol>{children}</ol>
   ),
-
+  pre: ({ children }) => (
+    <Card className="p-2">
+      <pre className="whitespace-pre-wrap">{children}</pre>
+    </Card>
+  ),
   Map: async (props) => {
     return <MapCard {...props} />
   },
