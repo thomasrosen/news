@@ -19,7 +19,7 @@ export async function importAndParseContentFile({ slug, subpath }: { slug: strin
         slug,
         title,
         description: metadata?.summary || '',
-        coverphoto: coverphoto ? `/api/images/${coverphoto}` : '',
+        coverphoto,
         coverphotoImported: null, // coverphotoResolved,
       },
     }

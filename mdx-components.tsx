@@ -1,3 +1,4 @@
+import imageLoader from '@/lib/image-loader'
 import type { MDXComponents } from 'mdx/types'
 import Image, { ImageProps } from 'next/image'
 
@@ -18,6 +19,7 @@ const components = {
   ),
   img: async (props) => {
     return <Image
+      loader={imageLoader}
       className="w-full h-auto my-4"
       width={600}
       height={600}

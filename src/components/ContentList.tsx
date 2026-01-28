@@ -1,5 +1,6 @@
 import { formatDate } from '@/lib/formatDate'
 import { getAllContentFiles } from '@/lib/getAllContentFiles'
+import imageLoader from '@/lib/image-loader'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -31,6 +32,7 @@ export async function ContentList({ subpath }: { subpath: string }) {
                 article.metadata.coverphotoImported || article.metadata.coverphoto
                   ? <div className="relative w-16 h-16 my-1 shrink-0">
                     <Image
+                      loader={imageLoader}
                       alt=""
                       src={article.metadata.coverphotoImported || article.metadata.coverphoto}
                       width={64}

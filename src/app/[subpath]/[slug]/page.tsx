@@ -3,6 +3,7 @@ import { addOpenGraphMetadataForArticle } from '@/lib/addOpenGraphMetadataForArt
 import { formatDate } from '@/lib/formatDate';
 import { getContentFilenames } from '@/lib/getContentFilenames';
 import { getOneContentFile } from '@/lib/getOneContentFile';
+import imageLoader from '@/lib/image-loader';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
@@ -70,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
     {
       metadata.coverphotoImported || metadata.coverphoto
         ? <Image
+          loader={imageLoader}
           alt=""
           src={metadata.coverphotoImported || metadata.coverphoto}
           className="w-full h-auto my-4"
