@@ -35,6 +35,8 @@ export async function ContentList({ subpath }: { subpath: string }) {
                       src={article.metadata.coverphotoImported || article.metadata.coverphoto}
                       sizes="64px"
                       fill={true}
+                      width={64}
+                      height={64}
                     />
                   </div>
                   : null

@@ -20,6 +20,8 @@ const components = {
     return <Image
       sizes="100vw"
       className="w-full h-auto my-4"
+      width={600}
+      height={600}
       {...(props as ImageProps)}
     />
   },
