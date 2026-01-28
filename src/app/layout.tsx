@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  return (<html lang="en" className={inter.variable}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased text-black bg-white`}>
+  return (<html lang="en">
+      <body className={`${inter.variable} antialiased`}>
         <main className="pb-96 max-w-xl mx-3 lg:mx-auto flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           {/* <Navbar /> */}
           {children}

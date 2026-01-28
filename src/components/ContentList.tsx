@@ -24,7 +24,7 @@ export async function ContentList({ subpath }: { subpath: string }) {
             className="flex flex-col space-y-0"
             href={`/${subpath}/${article.metadata.slug}`}
           >
-            <span className="text-neutral-600 dark:text-neutral-400 shrink-0 tabular-nums">
+            <span className="shrink-0 tabular-nums">
               {formatDate(article.metadata.publishedAt, false)}
             </span>
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
@@ -42,7 +42,7 @@ export async function ContentList({ subpath }: { subpath: string }) {
                   </div>
                   : null
               }
-              <p className="flex flex-col gap-0 text-neutral-900 dark:text-neutral-100 tracking-tight">
+              <p className="flex flex-col gap-0 tracking-tight">
                 <strong>{article.metadata.title || 'Untitled'}</strong>
                 {article.metadata.description || null}
               </p>

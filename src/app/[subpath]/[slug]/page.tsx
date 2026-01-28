@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
       {metadata.title}
     </h1>
     <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      <p className="text-sm">
         {formatDate(metadata.publishedAt)}
       </p>
     </div>
