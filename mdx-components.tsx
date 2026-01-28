@@ -43,7 +43,12 @@ const components = {
         //   node.url = `/api/images/${node.url}`
       }
 
-    return <a href={href} className={cn('transition-colors decoration-primary/60 hover:decoration-primary underline underline-offset-2 decoration-2 group')}>
+    return <a
+      href={href}
+      className={cn('transition-colors decoration-primary/60 hover:decoration-primary underline underline-offset-2 decoration-2 group')}
+      target={href.startsWith('http') ? '_blank' : undefined}
+      rel={href.startsWith('http') ? 'noopener noreferrer nofollow' : undefined}
+    >
       {children}
       {href.startsWith('http') ? <Icon name="arrow_outward" size="sm" className="transition-colors align-middle text-primary/60 group-hover:text-primary" /> : null}
     </a>
