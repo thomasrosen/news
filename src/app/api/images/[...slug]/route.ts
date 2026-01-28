@@ -24,7 +24,7 @@ export async function GET(
 
   const w = parseInt(url.searchParams.get('w') || '0');
   const q = parseInt(url.searchParams.get('q') || '80');
-  const cacheKey = `${relPath}-${w}x${q}.jpg`; // Cache filename (always JPEG output)
+  const cacheKey = `${relPath}-${w}x${q}.webp`; // Cache filename (always JPEG output)
   const cachePath = path.join(CACHE_DIR, cacheKey);
   const cacheResolved = path.resolve(cachePath);
 
@@ -35,7 +35,7 @@ export async function GET(
     return new NextResponse(cachedBuffer, {
       status: 200,
       headers: {
-        'Content-Type': 'image/jpeg',
+        'Content-Type': 'image/webp',
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Vary': 'w,q',
       },
@@ -50,7 +50,11 @@ export async function GET(
     const processor = sharp(originalBuffer)
       .rotate() // Auto-orient based on EXIF
       .resize(w > 0 ? w : undefined, undefined, { withoutEnlargement: true, fit: 'inside' })
-      .jpeg({ quality: Math.min(Math.max(q, 1), 100) });
+      // .jpeg({ quality: Math.min(Math.max(q, 1), 100) });
+      .webp({ 
+        quality: Math.min(Math.max(q, 1), 100),
+        effort: 4  // 0-6, balance between speed/size (default 4)
+      });
 
     const resizedBuffer = await processor.toBuffer();
 
@@ -61,7 +65,7 @@ export async function GET(
     return new NextResponse(new Uint8Array(resizedBuffer), {
       status: 200,
       headers: {
-        'Content-Type': 'image/jpeg',
+        'Content-Type': 'image/webp',
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Vary': 'w,q',
       },
