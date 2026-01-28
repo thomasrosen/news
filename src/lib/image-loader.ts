@@ -1,4 +1,6 @@
-'use client';
+'use client'
+
+const api_path = '/api/images/'
 
 export default function imageLoader({ src, width, quality }: { src: string; width: number; quality?: number }) {
   const params = new URLSearchParams({ w: width.toString() })
@@ -7,5 +9,5 @@ export default function imageLoader({ src, width, quality }: { src: string; widt
   }
 
   // Forward original path to your API route
-  return `/api/images/${src.replace(/^\//, '')}?${params.toString()}`
+  return `${src.startsWith(api_path) ? '' : api_path}${src}?${params.toString()}`
 }
