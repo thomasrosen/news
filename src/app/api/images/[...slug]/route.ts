@@ -25,7 +25,7 @@ export async function GET(
 
   const w = parseInt(url.searchParams.get('w') || '0');
   const q = parseInt(url.searchParams.get('q') || '80');
-  const cacheKey = `${relPath}-${w}x${q}-${CACHE_REVALIDATION_KEY}.webp`; // Cache filename (always JPEG output)
+  const cacheKey = `${CACHE_REVALIDATION_KEY}-${relPath}-${w}x${q}.webp`; // Cache filename (always JPEG output)
   const cachePath = path.join(CACHE_DIR, cacheKey);
   const cacheResolved = path.resolve(cachePath);
 
