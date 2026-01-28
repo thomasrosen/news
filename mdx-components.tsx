@@ -2,6 +2,12 @@ import { Icon } from "@/components/Icon";
 import { MapCard } from "@/components/map/MapCard";
 import { MarkerPoint } from "@/components/map/MarkerPoint";
 import { Card } from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { getOneContentFile } from "@/lib/getOneContentFile";
 import imageLoader from '@/lib/image-loader';
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from 'mdx/types';
@@ -31,16 +37,60 @@ const components = {
       {...(props as ImageProps)}
     />
   },
-  a: ({ children, href }) => {
+  a: async ({ children, href }) => {
 
       console.log('link node:', href)
-      if (href.startsWith('people/')) {
-        const [subpath, slug] = href.split('/')
-        console.log('would fetch link data for:', { subpath, slug })
-        // const linkData = await getOneContentFile({ slug, subpath })
-        // node.linkData = linkData
-        //   // node.url = `@@/content/media/${node.url}`
-        //   node.url = `/api/images/${node.url}`
+      if (href.startsWith('/people/')) {
+        const [subpath, slug] = href.slice(1).split('/')
+
+        const linkData = await getOneContentFile({ subpath, slug })
+        if (linkData) {
+          return <HoverCard openDelay={100} closeDelay={200}>
+            <HoverCardTrigger asChild>
+              <a
+                href={href}
+                className={cn('transition-colors decoration-primary/60 hover:decoration-primary underline underline-offset-2 decoration-2 group')}
+              >
+                {
+                  linkData.metadata.coverphotoImported || linkData.metadata.coverphoto
+                    ? <span className="inline-block align-text-bottom mx-1 relative w-4 h-4 shrink-0">
+                      <Image
+                        loader={imageLoader}
+                        alt=""
+                        src={linkData.metadata.coverphotoImported || linkData.metadata.coverphoto}
+                        width={16}
+                        height={16}
+                        className="object-cover w-full h-full rounded-full"
+                      />
+                    </span>
+                    : null
+                }
+                {linkData.metadata.title}
+              </a>
+            </HoverCardTrigger>
+            <HoverCardContent side="top" align="center" className="flex w-64 flex-col gap-0.5">
+              {
+                linkData.metadata.coverphotoImported || linkData.metadata.coverphoto
+                  ? <span className="inline-block align-text-bottom mb-2 relative w-16 h-16 shrink-0">
+                    <Image
+                      loader={imageLoader}
+                      alt=""
+                      src={linkData.metadata.coverphotoImported || linkData.metadata.coverphoto}
+                      width={64}
+                      height={64}
+                      className="object-cover w-full h-full rounded-full"
+                    />
+                  </span>
+                  : null
+              }
+              <div className="font-semibold">{linkData.metadata.title}</div>
+              <div>{linkData.metadata.description}</div>
+              <div className="text-muted-foreground mt-1 text-xs">
+                {href}
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        }
       }
 
     return <a
