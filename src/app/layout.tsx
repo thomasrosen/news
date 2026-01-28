@@ -1,3 +1,4 @@
+import { MaterialIconStyle } from "@/components/Icon";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
@@ -27,13 +28,16 @@ export default function RootLayout({
 
   return (<html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <main className="pb-96 max-w-xl mx-3 lg:mx-auto flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+        <div className="theme-bg" />
+        <main className="z-10 pb-96 max-w-xl mx-3 lg:mx-auto flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           {/* <Navbar /> */}
           {children}
           {/* <Footer /> */}
           {/* <Analytics /> */}
           {/* <SpeedInsights /> */}
         </main>
+
+        <MaterialIconStyle />
       </body>
     </html>
   );

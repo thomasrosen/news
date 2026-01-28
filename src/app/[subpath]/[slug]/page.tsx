@@ -9,12 +9,12 @@ import { notFound } from 'next/navigation';
 
 export const dynamicParams = false // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   const staticParams = []
 
   const extension = '.mdx' // Markdown files
   for (const subpath of possible_subpaths) {
-    const files = await getContentFilenames({ subpath })
+    const files = getContentFilenames({ subpath })
     staticParams.push(...files.map((file) => ({ subpath, slug: file.replace(extension, '') })))
   }
 
@@ -70,14 +70,16 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
 
     {
       metadata.coverphotoImported || metadata.coverphoto
-        ? <Image
-          loader={imageLoader}
-          alt=""
-          src={metadata.coverphotoImported || metadata.coverphoto}
-          className="w-full h-auto my-4"
-          width={600}
-          height={600}
-        />
+        ? <div className="relative w-full h-auto aspect-square mb-8 shrink-0">
+          <Image
+            loader={imageLoader}
+            alt=""
+            src={metadata.coverphotoImported || metadata.coverphoto}
+            width={600}
+            height={600}
+            className="object-cover w-full h-full"
+          />
+        </div>
         : null
     }
 

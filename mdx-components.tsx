@@ -1,7 +1,9 @@
+import { Icon } from "@/components/Icon";
 import { MapCard } from "@/components/map/MapCard";
 import { MarkerPoint } from "@/components/map/MarkerPoint";
 import { Card } from "@/components/ui/card";
 import imageLoader from '@/lib/image-loader';
+import { cn } from "@/lib/utils";
 import type { MDXComponents } from 'mdx/types';
 import Image, { ImageProps } from 'next/image';
 
@@ -28,6 +30,23 @@ const components = {
       height={600}
       {...(props as ImageProps)}
     />
+  },
+  a: ({ children, href }) => {
+
+      console.log('link node:', href)
+      if (href.startsWith('people/')) {
+        const [subpath, slug] = href.split('/')
+        console.log('would fetch link data for:', { subpath, slug })
+        // const linkData = await getOneContentFile({ slug, subpath })
+        // node.linkData = linkData
+        //   // node.url = `@@/content/media/${node.url}`
+        //   node.url = `/api/images/${node.url}`
+      }
+
+    return <a href={href} className={cn('transition-colors decoration-primary/60 hover:decoration-primary underline underline-offset-2 decoration-2 group')}>
+      {children}
+      {href.startsWith('http') ? <Icon name="arrow_outward" size="sm" className="transition-colors align-middle text-primary/60 group-hover:text-primary" /> : null}
+    </a>
   },
   li: ({ children }) => (
     <li>{children}</li>

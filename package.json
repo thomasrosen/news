@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
+    "@fontsource-variable/material-symbols-sharp": "^5.2.33",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.1.1",

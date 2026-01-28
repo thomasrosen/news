@@ -43,6 +43,7 @@ const withMDX = createMDX({
       [remarkMdxFrontmatter, { name: 'metadata' }],
       remarkExtractTitle,
       remarkPrefixImages,
+      // remarkModifyLinks,
     ],
     rehypePlugins: [
       [rehypeMdxImportMedia, { resolve: false }],

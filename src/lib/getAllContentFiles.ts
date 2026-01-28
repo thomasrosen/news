@@ -2,7 +2,7 @@ import { getContentFilenames } from '@/lib/getContentFilenames';
 import { importAndParseContentFile } from '@/lib/importAndParseContentFile';
 
 export async function getAllContentFiles({ subpath }: { subpath: string }) {
-  const files = await getContentFilenames({ subpath })
+  const files = getContentFilenames({ subpath })
 
   const contentFiles = await Promise.all(
     files.map(async (filename) => {

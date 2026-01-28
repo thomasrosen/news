@@ -1,10 +1,9 @@
-import fs from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
-export async function getContentFilenames({ subpath = 'articles' }: { subpath: string }): Promise<string[]> {
+export function getContentFilenames({ subpath = 'articles' }: { subpath: string }): string[] {
   const folderPath = path.join(process.cwd(), 'content', subpath);
-  const files = await fs.readdir(folderPath)
+  const files = fs.readdirSync(folderPath)
   const extension = '.mdx' // Markdown files
-  return files
-    .filter((file) => file.endsWith(extension))
+  return files.filter((file) => file.endsWith(extension))
 }

@@ -138,3 +138,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.theme-bg {
+  z-index: -1;
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 20px 30px;
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 0, #000 60%, #0000 100%);
+  mask-image: radial-gradient(70% 60% at 50% 0, #000 60%, #0000 100%);
+}
