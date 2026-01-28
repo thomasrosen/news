@@ -1,6 +1,8 @@
-import imageLoader from '@/lib/image-loader'
-import type { MDXComponents } from 'mdx/types'
-import Image, { ImageProps } from 'next/image'
+import { MapCard } from "@/components/map/MapCard";
+import { MarkerPoint } from "@/components/map/MarkerPoint";
+import imageLoader from '@/lib/image-loader';
+import type { MDXComponents } from 'mdx/types';
+import Image, { ImageProps } from 'next/image';
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -35,6 +37,13 @@ const components = {
   ol: ({ children }) => (
     <ol>{children}</ol>
   ),
+
+  Map: async (props) => {
+    return <MapCard {...props} />
+  },
+  Point: async (props) => {
+    return <MarkerPoint {...props} />
+  },
 } satisfies MDXComponents
 
 export function useMDXComponents(): MDXComponents {

@@ -1,6 +1,6 @@
 'use client'
 
-import { DotMarkerContent } from "@/components/DotMarkerContent";
+import { DotMarkerContent } from "@/components/map/DotMarkerContent";
 import { Card } from "@/components/ui/card";
 import {
   Map,

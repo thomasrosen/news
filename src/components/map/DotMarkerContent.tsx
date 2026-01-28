@@ -3,7 +3,7 @@ import {
 } from "@/components/ui/map";
 import { cn } from "@/lib/utils";
 
-export function DotMarkerContent({ size, color, ping, border, children }: { size: number, color?: string, ping?: boolean, border?: boolean, children: React.ReactNode }) {
+export function DotMarkerContent({ size, color, ping, border, children }: { size: number, color?: string, ping?: boolean, border?: boolean, children?: React.ReactNode }) {
   return (
     <MarkerContent>
               <div className="relative flex items-center justify-center">
@@ -11,13 +11,15 @@ export function DotMarkerContent({ size, color, ping, border, children }: { size
                 <div
                   className={`absolute rounded-full ${color} opacity-20`}
                   style={{
-                    width: size * 1.5,
-                    height: size * 1.5,
+                    backgroundColor: color,
+                    width: size * 1.75,
+                    height: size * 1.75,
                   }}
                 />
                 <div
                   className={`absolute rounded-full ${color} opacity-40 animate-ping`}
                   style={{
+                    backgroundColor: color,
                     width: size * 1,
                     height: size * 1,
                     animationDuration: "2s",
@@ -29,11 +31,16 @@ export function DotMarkerContent({ size, color, ping, border, children }: { size
                 <div
                   className={
                     cn(
-                      'absolute rounded-full top-[2px] blur-[6px] opacity-50',
+                      'absolute rounded-full opacity-50',
                       color
                     )
                   }
-                  style={{ width: size, height: size }}
+                  style={{
+                    width: size * 1,
+                    height: size * 1,
+                    'top': `${Math.round(size * 0.2)}px`,
+                    'filter': `blur(${Math.round(size * 0.2)}px)`,
+                  } as React.CSSProperties}
                 />
 
                 <div
@@ -44,14 +51,13 @@ export function DotMarkerContent({ size, color, ping, border, children }: { size
                       color
                     )
                   }
-                  style={{ width: size, height: size }}
+                  style={{ backgroundColor: color, width: size, height: size }}
                 >
                   <div className="text-white fill-white flex items-center justify-center text-xs font-semibold" style={{
                     width: size * 0.5,
                     height: size * 0.5,
                   }}>
                     {children}
-                    
                   </div>
                 </div>
               </div>
