@@ -28,11 +28,11 @@ export async function ContentList({ subpath }: { subpath: string }) {
             </span>
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
               {
-                article.metadata.coverphotoImported
+                article.metadata.coverphotoImported || article.metadata.coverphoto
                   ? <div className="relative w-16 h-16 my-1 shrink-0">
                     <Image
                       alt=""
-                      src={article.metadata.coverphotoImported}
+                      src={article.metadata.coverphotoImported || article.metadata.coverphoto}
                       sizes="64px"
                       fill={true}
                     />

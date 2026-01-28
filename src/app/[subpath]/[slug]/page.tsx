@@ -67,27 +67,27 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
       }}
     />
 
-      {
-        metadata.coverphotoImported
-          ? <Image
-            alt=""
-            src={metadata.coverphotoImported}
-            sizes="100vw"
-            className="w-full h-auto my-4"
-          />
-          : null
-      }
+    {
+      metadata.coverphotoImported || metadata.coverphoto
+        ? <Image
+          alt=""
+          src={metadata.coverphotoImported || metadata.coverphoto}
+          sizes="100vw"
+          className="w-full h-auto my-4"
+        />
+        : null
+    }
 
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(metadata.publishedAt)}
-        </p>
-      </div>
-      <article className="prose">
-        <ContentComponent />
-      </article>
+    <h1 className="title font-semibold text-2xl tracking-tighter">
+      {metadata.title}
+    </h1>
+    <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        {formatDate(metadata.publishedAt)}
+      </p>
+    </div>
+    <article className="prose">
+      <ContentComponent />
+    </article>
   </section>
 }
