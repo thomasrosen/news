@@ -6,7 +6,9 @@ import {
 } from "@/components/ui/map";
 import { Icon } from "../Icon";
 
-export async function MarkerPoint({ name,
+export async function MarkerPoint({
+  name,
+  description,
   longitude,
   latitude,
   border = true,
@@ -15,6 +17,7 @@ export async function MarkerPoint({ name,
   icon = null,
 }: {
   name?: string,
+  description?: string,
   longitude: number,
   latitude: number,
   border?: boolean,
@@ -36,14 +39,13 @@ export async function MarkerPoint({ name,
                 <MarkerTooltip>{name}</MarkerTooltip>
                 <MarkerPopup
                   closeButton
-                  className="w-62"
+                  className="w-64 p-4 text-sm flex flex-col gap-0.5"
                 >
-                  <div className="space-y-2">
-                  <h3 className="font-semibold text-foreground">{name}</h3>
-                  <p className="text-sm text-muted-foreground">
+                  {name && <h3 className="font-semibold">{name}</h3>}
+                  {description && <p>{description}</p>}
+                  <p className="text-muted-foreground mt-1 text-xs">
                     {latitude.toFixed(4)}, {longitude.toFixed(4)}
                   </p>
-                </div>
                 </MarkerPopup>
               </>
               : null
