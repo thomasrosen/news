@@ -72,7 +72,6 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
         ? <Image
           alt=""
           src={metadata.coverphotoImported || metadata.coverphoto}
-          sizes="100vw"
           className="w-full h-auto my-4"
           width={600}
           height={600}

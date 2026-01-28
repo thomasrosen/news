@@ -33,10 +33,9 @@ export async function ContentList({ subpath }: { subpath: string }) {
                     <Image
                       alt=""
                       src={article.metadata.coverphotoImported || article.metadata.coverphoto}
-                      sizes="64px"
-                      fill={true}
                       width={64}
                       height={64}
+                      className="object-cover w-16 h-16"
                     />
                   </div>
                   : null
