@@ -3,12 +3,12 @@ import { StaticImageData } from "next/image";
 
 export async function importAndParseContentFile({ slug, subpath }: { slug: string, subpath: string }): Promise<null | { ContentComponent: React.ElementType, metadata: ContentMetadata}> {
   try {
-    const { title = '', metadata = {}, default: ContentComponent } = await import(`@@/public/content/${subpath}/${slug}.mdx`)
+    const { title = '', metadata = {}, default: ContentComponent } = await import(`../../public/content/${subpath}/${slug}.mdx`)
 
     const coverphoto = metadata?.coverphoto || null
     let coverphotoResolved: StaticImageData | null = null
     if (coverphoto) {
-      const { default: coverphotoResolvedTmp } = await import(`@@/public/content/media/${coverphoto}`)
+      const { default: coverphotoResolvedTmp } = await import(`../../public/content/media/${coverphoto}`)
       coverphotoResolved = coverphotoResolvedTmp
     }
 
