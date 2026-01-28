@@ -4,13 +4,15 @@ import {
   MarkerPopup,
   MarkerTooltip
 } from "@/components/ui/map";
+import { Icon } from "../Icon";
 
 export async function MarkerPoint({ name,
   longitude,
   latitude,
   border = true,
   ping = false,
-  color = 'bg-primary'
+  color = 'bg-primary',
+  icon = null,
 }: {
   name?: string,
   longitude: number,
@@ -18,13 +20,15 @@ export async function MarkerPoint({ name,
   border?: boolean,
   ping?: boolean,
   color?: string
+  icon?: string | null
 }) {
   return (<MapMarker
             longitude={longitude}
             latitude={latitude}
           >
-            <DotMarkerContent size={20} color={color} border={border} ping={ping}>
+            <DotMarkerContent size={icon ? 36 : 20} color={color} border={border} ping={ping}>
               {/* <Zap className="w-full h-full" /> */}
+              {icon ? <Icon name={icon} size="md" wght={900} /> : null}
             </DotMarkerContent>
 
             {name
