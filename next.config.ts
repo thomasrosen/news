@@ -21,6 +21,12 @@ let nextConfig: NextConfig = {
         port: '3000',
         pathname: '/api/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'news.thomasrosen.me',
+        // port: '3000',
+        pathname: '/api/images/**',
+      },
     ]
   },
 }
