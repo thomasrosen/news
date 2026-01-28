@@ -29,6 +29,9 @@ let nextConfig: NextConfig = {
       },
     ]
   },
+  experimental: {
+    swcTraceProfiling: false,
+  },
 }
 
 const withMDX = createMDX({
