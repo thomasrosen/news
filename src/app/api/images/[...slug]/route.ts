@@ -1,4 +1,3 @@
-// app/api/images/[...slug]/route.ts
 import { NextResponse } from 'next/server';
 import fs from 'node:fs/promises';
 import path from 'node:path';
