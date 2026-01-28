@@ -6,6 +6,7 @@ import sharp from 'sharp';
 
 const BASE_DIR = path.join(process.cwd(), 'content', 'media');
 const CACHE_DIR = path.join(process.cwd(), 'cache');
+const CACHE_REVALIDATION_KEY = '2026-01-28'
 
 export async function GET(
   req: Request,
@@ -24,7 +25,7 @@ export async function GET(
 
   const w = parseInt(url.searchParams.get('w') || '0');
   const q = parseInt(url.searchParams.get('q') || '80');
-  const cacheKey = `${relPath}-${w}x${q}.webp`; // Cache filename (always JPEG output)
+  const cacheKey = `${relPath}-${w}x${q}-${CACHE_REVALIDATION_KEY}.webp`; // Cache filename (always JPEG output)
   const cachePath = path.join(CACHE_DIR, cacheKey);
   const cacheResolved = path.resolve(cachePath);
 
@@ -47,9 +48,10 @@ export async function GET(
   // Read original, resize, cache, and serve
   try {
     const originalBuffer = await fs.readFile(resolved);
+    const size = w > 0 ? w : undefined
     const processor = sharp(originalBuffer)
       .rotate() // Auto-orient based on EXIF
-      .resize(w > 0 ? w : undefined, undefined, { withoutEnlargement: true, fit: 'inside' })
+      .resize(size, size, { withoutEnlargement: true, fit: 'inside' })
       // .jpeg({ quality: Math.min(Math.max(q, 1), 100) });
       .webp({ 
         quality: Math.min(Math.max(q, 1), 100),
