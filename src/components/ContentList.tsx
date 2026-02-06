@@ -11,9 +11,7 @@ export async function ContentList({ subpath }: { subpath: string }) {
     <div className="flex flex-col gap-4">
       {allArticles
         .sort((a, b) => {
-          if (
-            new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
-          ) {
+          if (new Date(a.metadata.publishedAt || 0) > new Date(b.metadata.publishedAt || 0)) {
             return -1
           }
           return 1
@@ -24,9 +22,10 @@ export async function ContentList({ subpath }: { subpath: string }) {
             className="flex flex-col space-y-0 hover:opacity-80"
             href={article.metadata.filepath}
           >
+            {article.metadata.publishedAt &&
             <span className="shrink-0 tabular-nums opacity-60 text-sm tracking-tight">
               {formatDate(article.metadata.publishedAt, false)}
-            </span>
+            </span>}
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
               {
                 article.metadata.coverphoto

@@ -31,9 +31,8 @@ export const components = {
   ),
   img: async (props) => {
     const { src } = props
-    const raw_src_file_path = src.replace('/api/storage/images/', '')
-    const url_path_to_raw = `/api/storage/raw/${raw_src_file_path}`
-      .replace(/\/{2,}/, '/')
+    const raw_src_file_path = src.replace('/api/storage/images/', '/api/storage/raw/')
+    const url_path_to_raw = raw_src_file_path.replace(/\/{2,}/, '/')
 
     return <a href={url_path_to_raw} target="_blank">
       <Image
