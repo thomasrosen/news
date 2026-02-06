@@ -1,27 +1,29 @@
 import { Icon } from '@/components/Icon';
 import { Button } from '@/components/ui/button';
+import { possible_subpaths } from '@/constants';
 import { addOpenGraphMetadataForArticle } from '@/lib/addOpenGraphMetadataForArticle';
 import { fetchAndParseMxdFile } from '@/lib/fetchAndParseMxdFile';
 import { formatDate } from '@/lib/formatDate';
 import imageLoader from '@/lib/image-loader';
+import { listFiles } from '@/lib/storage/listFiles';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const dynamicParams = true // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
+export const dynamicParams = false // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
 
-// export function generateStaticParams() {
-//   const staticParams = []
-//
-//   const extension = '.mdx' // Markdown files
-//   for (const subpath of possible_subpaths) {
-//     const files = getContentFilenames({ subpath })
-//     staticParams.push(...files.map((file) => ({ subpath, slug: file.replace(extension, '') })))
-//   }
-//
-//   return staticParams
-// }
+export async function generateStaticParams() {
+  const staticParams = []
+
+  const extension = '.mdx' // Markdown files
+  for (const subpath of possible_subpaths) {
+    const files = await listFiles({ prefix: subpath })
+    staticParams.push(...files.map((file) => ({ slug: [subpath, file.replace(extension, '')] })))
+  }
+
+  return staticParams
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params

@@ -1,4 +1,5 @@
-import { baseUrl } from "@/constants";
+
+import { getRawFileContentFromStorage } from "@/lib/storage/getRawFileContentFromStorage";
 import { ContentMetadata } from "@/types/ContentMetadata";
 import { components } from "@@/mdx-components";
 import { mdxOptions } from "@@/next.config";
@@ -7,13 +8,15 @@ import { JSX } from "react";
 
 export async function fetchAndParseMxdFile({ filepath }: { filepath: string }): Promise<null | { content: JSX.Element, metadata: ContentMetadata}> {
   try {
-    console.log('filepath', filepath)
-    const res = await fetch(`${baseUrl}/api/storage/raw/${filepath}`)
-    if (!res.ok) {
-      console.error(`Failed to fetch content file: ${res.status} ${res.statusText}`)
-      return null
-    }
-    const source = await res.text()
+    const source = await getRawFileContentFromStorage({ filepath, textOrBuffer: 'text' })
+
+    // import { baseUrl } from "@/constants";
+    // const res = await fetch(`${baseUrl}/api/storage/raw/${filepath}`)
+    // if (!res.ok) {
+    //   console.error(`Failed to fetch content file: ${res.status} ${res.statusText}`)
+    //   return null
+    // }
+    // const source = await res.text()
 
     const eval_res = await evaluate({
       source,

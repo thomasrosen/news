@@ -1,8 +1,8 @@
 import { fetchAndParseMxdFile } from '@/lib/fetchAndParseMxdFile';
-import { getContentFilenames } from '@/lib/getContentFilenames';
+import { listFiles } from '@/lib/storage/listFiles';
 
 export async function getAllContentFiles({ subpath }: { subpath: string }) {
-  const files = getContentFilenames({ subpath })
+  const files = await listFiles({ prefix: subpath })
 
   const contentFiles = await Promise.all(
     files.map(async (filename) => {
@@ -13,18 +13,18 @@ export async function getAllContentFiles({ subpath }: { subpath: string }) {
       }
 
       return {
-      content: null,
-      metadata: {
-        filepath,
-        publishedAt: null,
-        title: filepath,
-        description: '',
-        coverphoto: ['.png', '.jpg', '.jpeg'].some((ext) => filepath.endsWith(ext))
-          ? `/api/storage/images/${filepath}`
-            .replace(/\/{2,}/g, '/') // replace multiple slashes with a single slash
-          : '',
-      },
-    }
+        content: null,
+        metadata: {
+          filepath,
+          publishedAt: null,
+          title: filepath,
+          description: '',
+          coverphoto: ['.png', '.jpg', '.jpeg'].some((ext) => filepath.endsWith(ext))
+            ? `/api/storage/images/${filepath}`
+              .replace(/\/{2,}/g, '/') // replace multiple slashes with a single slash
+            : '',
+        },
+      }
     })
   )
 

@@ -1,59 +1,21 @@
-import { fileTypeFromBuffer } from 'file-type';
+import { createReadStream } from '@/lib/storage/createReadStream';
+import { getFileSize } from '@/lib/storage/getFileSize';
+import { getFileType } from '@/lib/storage/getFileType';
 import { NextResponse } from 'next/server';
-import fs from 'node:fs';
-import fsp from 'node:fs/promises';
-import path from 'node:path';
-
-const BASE_DIR = path.join(process.cwd(), 'content');
-const SNIFF_BYTES = 4100;
-
-const TEXT_MIME_TYPES: Record<string, string> = {
-  '.txt': 'text/plain; charset=utf-8',
-  '.md': 'text/markdown; charset=utf-8',
-  '.mdx': 'text/markdown; charset=utf-8',
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-};
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ slug: string[] }> }
 ) {
   const { slug } = await params;
-  const resolved = path.resolve(
-    path.join(BASE_DIR, slug.join('/'))
-  );
-
-  if (!resolved.startsWith(BASE_DIR)) {
-    return new NextResponse('Forbidden', { status: 403 });
-  }
+  const filepath = slug.join('/');
 
   try {
-    // get the content length
-    const stat = await fsp.stat(resolved);
-    if (!stat.isFile()) {
-      return new NextResponse('Not found', { status: 404 });
-    }
-
-    // detect the content type
-    const ext = path.extname(resolved).toLowerCase();
-    let contentType = TEXT_MIME_TYPES[ext];
-    if (!contentType) {
-      const fh = await fsp.open(resolved, 'r');
-      const buffer = Buffer.alloc(
-        Math.min(SNIFF_BYTES, stat.size)
-      );
-      await fh.read(buffer, 0, buffer.length, 0);
-      await fh.close();
-
-      const detected = await fileTypeFromBuffer(buffer);
-      contentType = detected?.mime ?? 'application/octet-stream';
-    }
+    const fileSize = await getFileSize({ filepath });
+    const contentType = await getFileType({ filepath });
 
     // stream the file to the client
-    const nodeStream = fs.createReadStream(resolved);
+    const nodeStream = createReadStream({ filepath });
     const webStream = new ReadableStream({
       start(controller) {
         nodeStream.on('data', chunk => controller.enqueue(chunk));
@@ -70,7 +32,7 @@ export async function GET(
       status: 200,
       headers: {
         'Content-Type': contentType,
-        'Content-Length': stat.size.toString(),
+        'Content-Length': String(fileSize),
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });

@@ -1,11 +1,11 @@
+import { getRawFileContentFromStorage } from '@/lib/storage/getRawFileContentFromStorage';
 import { NextResponse } from 'next/server';
-import fs from 'node:fs/promises';
-import path from 'node:path';
+// import fs from 'node:fs/promises';
+// import path from 'node:path';
 import sharp from 'sharp';
 
-const BASE_DIR = path.join(process.cwd(), 'content');
-const CACHE_DIR = path.join(process.cwd(), 'cache', 'images');
-const CACHE_REVALIDATION_KEY = '2026-01-28'
+// const CACHE_DIR = path.join(process.cwd(), 'cache', 'images');
+// const CACHE_REVALIDATION_KEY = '2026-01-28'
 
 export async function GET(
   req: Request,
@@ -13,41 +13,34 @@ export async function GET(
 ) {
   const { slug } = await params;
   const url = new URL(req.url);
-  const relPath = slug.join('/');
-  const filePath = path.join(BASE_DIR, relPath);
-  const resolved = path.resolve(filePath);
-
-  // Prevent directory traversal
-  if (!resolved.startsWith(BASE_DIR)) {
-    return new NextResponse('Forbidden', { status: 403 });
-  }
+  const filepath = slug.join('/');
 
   const w = parseInt(url.searchParams.get('w') || '0');
   const q = parseInt(url.searchParams.get('q') || '80');
-  const cacheKey = `${CACHE_REVALIDATION_KEY}-${relPath}-${w}x${q}.webp` // Cache filename
-    .replace(/[/\\?%*:|"<>]/g, '-'); // Sanitize for filesystem
-  const cachePath = path.join(CACHE_DIR, cacheKey);
-  const cacheResolved = path.resolve(cachePath);
+  // const cacheKey = `${CACHE_REVALIDATION_KEY}-${filepath}-${w}x${q}.webp` // Cache filename
+  //   .replace(/[/\\?%*:|"<>]/g, '-'); // Sanitize for filesystem
+  // const cachePath = path.join(CACHE_DIR, cacheKey);
+  // const cacheResolved = path.resolve(cachePath);
 
-  // Check cache first
-  try {
-    await fs.access(cacheResolved);
-    const cachedBuffer = await fs.readFile(cacheResolved);
-    return new NextResponse(cachedBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'image/webp',
-        'Cache-Control': 'public, max-age=31536000, immutable',
-        'Vary': 'w,q',
-      },
-    });
-  } catch {
-    // Cache miss
-  }
+  // // Check cache first
+  // try {
+  //   await fs.access(cacheResolved);
+  //   const cachedBuffer = await fs.readFile(cacheResolved);
+  //   return new NextResponse(cachedBuffer, {
+  //     status: 200,
+  //     headers: {
+  //       'Content-Type': 'image/webp',
+  //       'Cache-Control': 'public, max-age=31536000, immutable',
+  //       'Vary': 'w,q',
+  //     },
+  //   });
+  // } catch {
+  //   // Cache miss
+  // }
 
   // Read original, resize, cache, and serve
   try {
-    const originalBuffer = await fs.readFile(resolved);
+    const originalBuffer = await getRawFileContentFromStorage({ filepath, textOrBuffer: 'buffer' });
     const size = w > 0 ? w : undefined
     const processor = sharp(originalBuffer)
       .rotate() // Auto-orient based on EXIF
@@ -60,9 +53,9 @@ export async function GET(
 
     const resizedBuffer = await processor.toBuffer();
 
-    // Ensure cache dir exists
-    await fs.mkdir(CACHE_DIR, { recursive: true });
-    await fs.writeFile(cacheResolved, resizedBuffer);
+    // // Ensure cache dir exists
+    // await fs.mkdir(CACHE_DIR, { recursive: true });
+    // await fs.writeFile(cacheResolved, resizedBuffer);
 
     return new NextResponse(new Uint8Array(resizedBuffer), {
       status: 200,
