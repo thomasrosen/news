@@ -1,50 +1,53 @@
-import { possible_subpaths } from '@/constants';
+import { Icon } from '@/components/Icon';
+import { Button } from '@/components/ui/button';
 import { addOpenGraphMetadataForArticle } from '@/lib/addOpenGraphMetadataForArticle';
+import { fetchAndParseMxdFile } from '@/lib/fetchAndParseMxdFile';
 import { formatDate } from '@/lib/formatDate';
-import { getContentFilenames } from '@/lib/getContentFilenames';
-import { getOneContentFile } from '@/lib/getOneContentFile';
 import imageLoader from '@/lib/image-loader';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
-export const dynamicParams = false // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
+export const dynamicParams = true // By marking dynamicParams as false, accessing a route not defined in generateStaticParams will 404.
 
-export function generateStaticParams() {
-  const staticParams = []
+// export function generateStaticParams() {
+//   const staticParams = []
+//
+//   const extension = '.mdx' // Markdown files
+//   for (const subpath of possible_subpaths) {
+//     const files = getContentFilenames({ subpath })
+//     staticParams.push(...files.map((file) => ({ subpath, slug: file.replace(extension, '') })))
+//   }
+//
+//   return staticParams
+// }
 
-  const extension = '.mdx' // Markdown files
-  for (const subpath of possible_subpaths) {
-    const files = getContentFilenames({ subpath })
-    staticParams.push(...files.map((file) => ({ subpath, slug: file.replace(extension, '') })))
-  }
-
-  return staticParams
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ subpath: string, slug: string }> }) {
-  const { slug, subpath } = await params
-  const { metadata } = await getOneContentFile({ slug, subpath }) || {}
+export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params
+  const filepath = slug.join('/')
+  const { metadata } = await fetchAndParseMxdFile({ filepath }) || {}
 
   if (!metadata) {
     return null
   }
 
-  if (subpath === 'articles') {
+  if (slug.includes('articles')) {
     return await addOpenGraphMetadataForArticle({ metadata })
   }
 
   return metadata
 }
 
-export default async function Page({ params }: { params: Promise<{ subpath: string, slug: string }> }) {
-  const { slug, subpath } = await params
-
-  const article = await getOneContentFile({ slug, subpath })
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params
+  const filepath = slug.join('/')
+  const article = await fetchAndParseMxdFile({ filepath })
   if (!article) {
     notFound()
   }
 
-  const { ContentComponent, metadata } = article
+  const { content, metadata } = article
 
   return <section>
     <script
@@ -59,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
           dateModified: metadata.publishedAt,
           description: metadata.description,
           // image: metadata.coverphoto,
-          // url: `${baseUrl}/articles/${metadata.slug}`,
+          // url: `${baseUrl}/${metadata.filepath}`,
           // author: {
           //   '@type': 'Person',
           //   name: metadata.author || 'Unknown Author',
@@ -68,13 +71,21 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
       }}
     />
 
+    <Link href="/" className="block mb-8">
+      <Button variant="outline">
+        <Icon name="arrow_back" size="sm" />
+        back to startpage
+      </Button>
+    </Link>
+
     {
-      metadata.coverphotoImported || metadata.coverphoto
+      metadata.coverphoto
         ? <div className="relative w-full h-auto aspect-square mb-8 shrink-0">
           <Image
+            loading="eager"
             loader={imageLoader}
             alt=""
-            src={metadata.coverphotoImported || metadata.coverphoto}
+            src={metadata.coverphoto}
             width={600}
             height={600}
             className="object-cover w-full h-full"
@@ -92,7 +103,9 @@ export default async function Page({ params }: { params: Promise<{ subpath: stri
       </p>
     </div>
     <article className="prose">
-      <ContentComponent />
+      <Suspense fallback="Loading…">
+        {content}
+      </Suspense>
     </article>
   </section>
 }

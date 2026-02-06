@@ -1,8 +1,9 @@
 import { ContentList } from "@/components/ContentList";
-import { possible_subpaths } from "@/constants";
+import { baseUrl, possible_subpaths } from "@/constants";
 import React from "react";
 
 export const metadata = {
+  metadataBase: new URL(baseUrl),
   title: 'Blog',
   description: 'Read my blog.',
 }

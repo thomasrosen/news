@@ -14,7 +14,7 @@ export function addOpenGraphMetadataForArticle({ metadata }: { metadata: Content
         description: metadata?.description,
         type: 'article',
         publishedTime: metadata?.publishedAt,
-        url: `${baseUrl}/article/${metadata?.slug}`,
+        url: `${baseUrl}/${metadata?.filepath}`,
         images: [
           {
             url: ogImage,

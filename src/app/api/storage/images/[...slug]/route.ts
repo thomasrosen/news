@@ -3,8 +3,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
-const BASE_DIR = path.join(process.cwd(), 'content', 'media');
-const CACHE_DIR = path.join(process.cwd(), 'cache');
+const BASE_DIR = path.join(process.cwd(), 'content');
+const CACHE_DIR = path.join(process.cwd(), 'cache', 'images');
 const CACHE_REVALIDATION_KEY = '2026-01-28'
 
 export async function GET(
@@ -24,7 +24,8 @@ export async function GET(
 
   const w = parseInt(url.searchParams.get('w') || '0');
   const q = parseInt(url.searchParams.get('q') || '80');
-  const cacheKey = `${CACHE_REVALIDATION_KEY}-${relPath}-${w}x${q}.webp`; // Cache filename (always JPEG output)
+  const cacheKey = `${CACHE_REVALIDATION_KEY}-${relPath}-${w}x${q}.webp` // Cache filename
+    .replace(/[/\\?%*:|"<>]/g, '-'); // Sanitize for filesystem
   const cachePath = path.join(CACHE_DIR, cacheKey);
   const cacheResolved = path.resolve(cachePath);
 
@@ -71,11 +72,11 @@ export async function GET(
         'Vary': 'w,q',
       },
     });
-  } catch (err: any) {
-    if (err.code === 'ENOENT') {
+  } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       return new NextResponse('Not found', { status: 404 });
     }
-    console.error(err);
+    console.error(error);
     return new NextResponse('Internal server error', { status: 500 });
   }
 }

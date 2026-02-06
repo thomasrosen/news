@@ -7,18 +7,19 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { getOneContentFile } from "@/lib/getOneContentFile";
+import { fetchAndParseMxdFile } from "@/lib/fetchAndParseMxdFile";
 import imageLoader from '@/lib/image-loader';
 import { cn } from "@/lib/utils";
 import type { MDXComponents } from 'mdx/types';
 import Image, { ImageProps } from 'next/image';
+import { Suspense } from "react";
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
 // React component you want, including inline styles,
 // components from other libraries, and more.
 
-const components = {
+export const components = {
   h2: ({ children }) => (
     <h2 className="text-2xl font-bold mt-8 my-2">{children}</h2>
   ),
@@ -29,21 +30,24 @@ const components = {
     <p className="my-2">{children}</p>
   ),
   img: async (props) => {
-    return <Image
-      loader={imageLoader}
-      className="w-full h-auto my-4"
-      width={600}
-      height={600}
-      {...(props as ImageProps)}
-    />
+    const { src } = props
+    const raw_src_file_path = src.replace('/api/storage/images/', '')
+    const url_path_to_raw = `/api/storage/raw/${raw_src_file_path}`
+      .replace(/\/{2,}/, '/')
+
+    return <a href={url_path_to_raw} target="_blank">
+      <Image
+        loader={imageLoader}
+        className="w-full h-auto my-4"
+        width={600}
+        height={600}
+        {...(props as ImageProps)}
+      />
+    </a>
   },
   a: async ({ children, href }) => {
-
-      console.log('link node:', href)
-      if (href.startsWith('/people/')) {
-        const [subpath, slug] = href.slice(1).split('/')
-
-        const linkData = await getOneContentFile({ subpath, slug })
+      if (href.startsWith('/people/') && href.endsWith('.mdx')) {
+        const linkData = await fetchAndParseMxdFile({ filepath: href })
         if (linkData) {
           return <HoverCard openDelay={100} closeDelay={200}>
             <HoverCardTrigger asChild>
@@ -52,12 +56,12 @@ const components = {
                 className={cn('transition-colors decoration-primary/60 hover:decoration-primary underline underline-offset-2 decoration-2 group')}
               >
                 {
-                  linkData.metadata.coverphotoImported || linkData.metadata.coverphoto
+                  linkData.metadata.coverphoto
                     ? <span className="inline-block align-text-bottom mx-1 relative w-4 h-4 shrink-0">
                       <Image
                         loader={imageLoader}
                         alt=""
-                        src={linkData.metadata.coverphotoImported || linkData.metadata.coverphoto}
+                        src={linkData.metadata.coverphoto}
                         width={16}
                         height={16}
                         className="object-cover w-full h-full rounded-full"
@@ -70,12 +74,12 @@ const components = {
             </HoverCardTrigger>
             <HoverCardContent side="top" align="center" className="flex w-64 flex-col gap-0.5">
               {
-                linkData.metadata.coverphotoImported || linkData.metadata.coverphoto
+                linkData.metadata.coverphoto
                   ? <span className="inline-block align-text-bottom mb-2 relative w-16 h-16 shrink-0">
                     <Image
                       loader={imageLoader}
                       alt=""
-                      src={linkData.metadata.coverphotoImported || linkData.metadata.coverphoto}
+                      src={linkData.metadata.coverphoto}
                       width={64}
                       height={64}
                       className="object-cover w-full h-full rounded-full"
@@ -118,7 +122,7 @@ const components = {
     </Card>
   ),
   Map: async (props) => {
-    return <MapCard {...props} />
+    return <Suspense><MapCard {...props} /></Suspense>
   },
   Point: async (props) => {
     return <MarkerPoint {...props} />

@@ -4,7 +4,7 @@ import { getAllContentFiles } from '@/lib/getAllContentFiles';
 export default async function sitemap() {
   let articles = (await getAllContentFiles({ subpath: 'articles' }))
   .map((article) => ({
-    url: `${baseUrl}/article/${article.metadata.slug}`,
+    url: `${baseUrl}/${article.metadata.filepath}`,
     lastModified: article.metadata.publishedAt,
   }))
 

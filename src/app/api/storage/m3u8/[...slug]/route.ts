@@ -33,8 +33,8 @@ vs%v/out.m3u8
 
 */
 
-const BASE_DIR = path.join(process.cwd(), 'content', 'media');
-const CACHE_DIR = path.join(process.cwd(), 'cache');
+const BASE_DIR = path.join(process.cwd(), 'content');
+const CACHE_DIR = path.join(process.cwd(), 'cache', 'videos');
 const CACHE_REVALIDATION_KEY = '2026-01-28'
 
 export async function GET(
@@ -116,7 +116,7 @@ export async function GET(
 
 
 
-
+/*
 app.get("/video", function (req, res) {
   // Ensure there is a range given for the video
   const range = req.headers.range;
@@ -152,3 +152,4 @@ app.get("/video", function (req, res) {
   // Stream the video chunk to the client
   videoStream.pipe(res);
 })
+*/

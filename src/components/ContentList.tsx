@@ -20,21 +20,21 @@ export async function ContentList({ subpath }: { subpath: string }) {
         })
         .map((article) => {
           return <Link
-            key={article.metadata.slug}
+            key={article.metadata.filepath}
             className="flex flex-col space-y-0 hover:opacity-80"
-            href={`/${subpath}/${article.metadata.slug}`}
+            href={article.metadata.filepath}
           >
             <span className="shrink-0 tabular-nums opacity-60 text-sm tracking-tight">
               {formatDate(article.metadata.publishedAt, false)}
             </span>
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
               {
-                article.metadata.coverphotoImported || article.metadata.coverphoto
+                article.metadata.coverphoto
                   ? <div className="relative w-16 h-16 my-1 shrink-0">
                     <Image
                       loader={imageLoader}
                       alt=""
-                      src={article.metadata.coverphotoImported || article.metadata.coverphoto}
+                      src={article.metadata.coverphoto}
                       width={64}
                       height={64}
                       className="object-cover w-16 h-16"

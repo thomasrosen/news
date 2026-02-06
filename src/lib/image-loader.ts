@@ -1,6 +1,6 @@
 'use client'
 
-const api_path = '/api/images/'
+const api_path = '/api/storage/images/'
 
 export default function imageLoader({ src, width, quality }: { src: string; width: number; quality?: number }) {
   const params = new URLSearchParams({ w: width.toString() })

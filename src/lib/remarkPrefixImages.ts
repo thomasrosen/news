@@ -6,8 +6,8 @@ export const remarkPrefixImages: Plugin<[], Root> = () => {
   return (tree: Root) => {
     visit(tree, 'image', (node) => {
       if (node.url) {
-        // node.url = `@@/content/media/${node.url}`
-        node.url = `/api/images/${node.url}`
+        node.url = `/api/storage/images/${node.url}`
+          .replace(/\/{2,}/g, '/') // replace multiple slashes with a single slash
         return false;
       }
     })

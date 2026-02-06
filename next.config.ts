@@ -1,6 +1,6 @@
 import { remarkExtractTitle } from '@/lib/remarkExtractTitle';
 import { remarkPrefixImages } from '@/lib/remarkPrefixImages';
-import createMDX from '@next/mdx';
+import { default as createMDX, default as nextMDX } from '@next/mdx';
 import type { NextConfig } from "next";
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeMdxImportMedia from 'rehype-mdx-import-media';
@@ -19,13 +19,13 @@ let nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '3000',
-        pathname: '/api/images/**',
+        pathname: '/api/storage/images/**',
       },
       {
         protocol: 'https',
         hostname: 'news.thomasrosen.me',
         // port: '3000',
-        pathname: '/api/images/**',
+        pathname: '/api/storage/images/**',
       },
     ]
   },
@@ -34,22 +34,23 @@ let nextConfig: NextConfig = {
   },
 }
 
+export const mdxOptions: nextMDX.NextMDXOptions['options'] = {
+  remarkPlugins: [
+    remarkGfm,
+    [remarkFrontmatter, {type: 'yaml', marker: '-'}],
+    [remarkMdxFrontmatter, { name: 'metadata' }],
+    remarkExtractTitle,
+    remarkPrefixImages,
+    // remarkModifyLinks,
+  ],
+  rehypePlugins: [
+    [rehypeMdxImportMedia, { resolve: false }],
+    [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer', 'nofollow'] }]
+  ],
+}
 const withMDX = createMDX({
   extension: /\.(md|mdx)$/,
-  options: {
-    remarkPlugins: [
-      remarkGfm,
-      [remarkFrontmatter, {type: 'yaml', marker: '-'}],
-      [remarkMdxFrontmatter, { name: 'metadata' }],
-      remarkExtractTitle,
-      remarkPrefixImages,
-      // remarkModifyLinks,
-    ],
-    rehypePlugins: [
-      [rehypeMdxImportMedia, { resolve: false }],
-      [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer', 'nofollow'] }]
-    ],
-  },
+  options: mdxOptions,
 })
 // Merge MDX config with Next.js config
 nextConfig = withMDX(nextConfig)
