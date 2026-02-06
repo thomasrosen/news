@@ -18,7 +18,7 @@ export async function GET() {
           <link>${baseUrl}/${article.metadata.filepath}</link>
           <description>${article.metadata.description || ''}</description>
           <pubDate>${new Date(
-            article.metadata.publishedAt
+            article.metadata.publishedAt || 0
           ).toUTCString()}</pubDate>
         </item>`
     )
