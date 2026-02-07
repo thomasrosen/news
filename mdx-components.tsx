@@ -1,11 +1,12 @@
 import { MapCard } from "@/components/map/MapCard";
 import { MarkerPoint } from "@/components/map/MarkerPoint";
-import { EnhancedLink } from "@/components/server/EnhancedLink";
+import { EnhancedLink, EnhancedLinkButton } from "@/components/server/EnhancedLink";
 import { Card } from "@/components/ui/card";
 import imageLoader from '@/lib/image-loader';
+import { cn } from "@/lib/utils";
 import type { MDXComponents } from 'mdx/types';
 import Image, { ImageProps } from 'next/image';
-import { Suspense } from "react";
+import Link from "next/link";
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -22,23 +23,37 @@ export const components = {
   p: (props) => (
     <div {...props} role="paragraph" className="my-3" />
   ),
-  img: async (props) => {
-    const { src } = props
-    const raw_src_file_path = src.replace('/api/storage/images/', '/api/storage/raw/')
-    const url_path_to_raw = raw_src_file_path.replace(/\/{2,}/, '/')
+  img: (props) => {
+    return <Image
+      loader={imageLoader}
+      className="w-full h-auto my-4"
+      width={600}
+      height={600}
+      {...(props as ImageProps)}
+    />
 
-    return <a href={url_path_to_raw} target="_blank">
-      <Image
-        loader={imageLoader}
-        className="w-full h-auto my-4"
-        width={600}
-        height={600}
-        {...(props as ImageProps)}
-      />
-    </a>
+    // const { src } = props
+    // const raw_src_file_path = src.replace('/api/storage/images/', '/api/storage/raw/')
+    // const url_path_to_raw = raw_src_file_path.replace(/\/{2,}/, '/')
+    //
+    // return <a href={url_path_to_raw} target="_blank">
+    //   <Image
+    //     loader={imageLoader}
+    //     className="w-full h-auto my-4"
+    //     width={600}
+    //     height={600}
+    //     {...(props as ImageProps)}
+    //   />
+    // </a>
   },
   a: async (props) => {
     return <EnhancedLink {...props} />
+  },
+  Button: (props) => {
+    return <EnhancedLinkButton {...props} />
+  },
+  Link: ({ className, ...props }) => {
+    return <Link {...props} className={cn('transition-opacity hover:opacity-90', className)} />
   },
   li: ({ children }) => (
     <li>{children}</li>
@@ -54,17 +69,17 @@ export const components = {
       <pre className="whitespace-pre-wrap">{children}</pre>
     </Card>
   ),
-  Map: async (props) => {
-    return <Suspense><MapCard {...props} /></Suspense>
+  Map: (props) => {
+    return <MapCard {...props} />
   },
-  Point: async (props) => {
+  Point: (props) => {
     return <MarkerPoint {...props} />
   },
-  Box: async (props) => {
-    return <div {...props} role="group" className="block bg-secondary py-2.5 px-6 -mx-6 my-3" />
-  },
-  BoxLink: async (props) => {
-    return <Suspense><EnhancedLink {...props} className="text-foreground bg-secondary py-2.5 px-6 -mx-6 my-3 hover:opacity-90 no-underline flex items-center font-bold gap-3" /></Suspense>
+  Box: ({ children, wide = false, ...props }) => {
+    return <div {...props} role="group" className={cn('relative py-2 px-6 -mx-6 my-6', wide === false && 'bg-secondary')}>
+      {wide === true ? <div className="absolute inset-0 left-1/2 w-screen -translate-x-1/2 -z-1 bg-secondary" /> : null}
+      {children}
+    </div>
   },
 } satisfies MDXComponents
 
