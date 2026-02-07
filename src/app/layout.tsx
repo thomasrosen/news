@@ -21,7 +21,7 @@ export default function RootLayout({
   return (<html lang="en">
       <body className={`${inter.variable} antialiased`}>
         <div className="theme-bg" />
-        <main className="z-10 pb-96 max-w-xl mx-auto flex-auto min-w-0 mt-6 flex flex-col px-2">
+        <main className="z-10 pb-96 max-w-xl mx-auto flex-auto min-w-0 mt-6 flex flex-col px-6">
           {/* <Navbar /> */}
           {children}
           {/* <Footer /> */}

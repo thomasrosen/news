@@ -1,10 +1,10 @@
+import { Icon } from "@/components/Icon";
 import { DotMarkerContent } from "@/components/map/DotMarkerContent";
 import {
   MapMarker,
   MarkerPopup,
   MarkerTooltip
 } from "@/components/ui/map";
-import { Icon } from "../Icon";
 
 export async function MarkerPoint({
   name,

@@ -1,9 +1,9 @@
 import { Icon } from '@/components/Icon';
 import { Button } from '@/components/ui/button';
 import { addOpenGraphMetadataForArticle } from '@/lib/addOpenGraphMetadataForArticle';
-import { fetchAndParseMxdFile } from '@/lib/fetchAndParseMxdFile';
 import { formatDate } from '@/lib/formatDate';
 import imageLoader from '@/lib/image-loader';
+import { loadAndParseMxdFile } from '@/lib/loadAndParseMxdFile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const filepath = slug.join('/')
 
   if (filepath.endsWith('.mdx')) {
-    const { metadata } = await fetchAndParseMxdFile({ filepath }) || {}
+    const { metadata } = await loadAndParseMxdFile({ filepath }) || {}
 
     if (!metadata) {
       return null
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const filepath = slug.join('/')
 
   if (filepath.endsWith('.mdx')) {
-    const mdx_file_content = await fetchAndParseMxdFile({ filepath })
+    const mdx_file_content = await loadAndParseMxdFile({ filepath })
     if (!mdx_file_content) {
       notFound()
     }
@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         }}
       />
 
-      <Link href="/" className="block mb-8">
+      <Link href="/" className="block mb-6">
         <Button variant="outline">
           <Icon name="arrow_back" size="sm" />
           back to startpage
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 
       {
         metadata.coverphoto
-          ? <div className="relative w-full h-auto aspect-square mb-8 shrink-0">
+          ? <div className="relative w-full h-auto aspect-square mb-6 shrink-0">
             <Image
               loading="eager"
               loader={imageLoader}
@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       <h1 className="title font-semibold text-2xl tracking-tighter">
         {metadata.title}
       </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+      <div className="flex justify-between items-center mt-2 mb-6 text-sm">
         <p className="shrink-0 tabular-nums opacity-60 text-sm tracking-tight">
           {formatDate(metadata.publishedAt)}
         </p>

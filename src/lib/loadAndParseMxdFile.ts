@@ -6,7 +6,7 @@ import { mdxOptions } from "@@/next.config";
 import { evaluate } from "next-mdx-remote-client/rsc";
 import { JSX } from "react";
 
-export async function fetchAndParseMxdFile({ filepath }: { filepath: string }): Promise<null | { content: JSX.Element, metadata: ContentMetadata}> {
+export async function loadAndParseMxdFile({ filepath }: { filepath: string }): Promise<null | { content: JSX.Element, metadata: ContentMetadata}> {
   try {
     const source = await getRawFileContentFromStorage({ filepath, textOrBuffer: 'text' })
 

@@ -1,4 +1,4 @@
-import { fetchAndParseMxdFile } from '@/lib/fetchAndParseMxdFile';
+import { loadAndParseMxdFile } from "@/lib/loadAndParseMxdFile";
 import { listFiles } from '@/lib/storage/listFiles';
 
 export async function getAllContentFiles({ subpath }: { subpath: string }) {
@@ -9,7 +9,7 @@ export async function getAllContentFiles({ subpath }: { subpath: string }) {
       const filepath = `${subpath}/${filename}`
 
       if (filename.endsWith('.mdx')) {
-        return await fetchAndParseMxdFile({ filepath })
+        return await loadAndParseMxdFile({ filepath })
       }
 
       return {

@@ -1,22 +1,25 @@
-import type { Root } from 'mdast';
+import type { Parent, Root } from 'mdast';
 import type { Plugin } from 'unified';
-import { visit } from 'unist-util-visit';
+import { SKIP, visit } from 'unist-util-visit';
 
 export const remarkExtractTitle: Plugin<[], Root> = () => {
   return (tree: Root) => {
     let title = '';
+    let titleParent: Parent | undefined;
 
-    visit(tree, 'heading', (node) => {
+    visit(tree, 'heading', (node, _index, parent) => {
       if (node.depth === 1 && !title) {
         title = node.children
           .map((child: any) => child.value || '')
           .join('')
           .trim()
-        return false;
+
+        titleParent = parent;
+        return [SKIP];  // Signal visit correctly [web:9]
       }
     });
 
-    if (title) {
+    if (title && titleParent) {
       // Inject ESM export as first node
       tree.children.unshift({
         "type": "mdxjsEsm",
@@ -52,14 +55,14 @@ export const remarkExtractTitle: Plugin<[], Root> = () => {
           }
         }
       })
-    }
 
-    // Remove the original title heading
-    tree.children = tree.children.filter((node) => {
-      if (node.type === 'heading' && node.depth === 1) {
-        return false;
-      }
-      return true;
-    });
+      // Remove the original title heading
+      titleParent.children = titleParent.children.filter((node) => {
+        if (node.type === 'heading' && node.depth === 1) {
+          return false;
+        }
+        return true;
+      });
+    }
   };
 };
