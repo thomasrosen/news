@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/map";
 
 export function MapCard (props: React.ComponentProps<typeof Map>) {
-    return <Card className="h-[400px] p-0 overflow-hidden">
+    return <Card className="h-[400px] w-full p-0 overflow-hidden">
       <Map {...props}>
         <MapControls
           position="bottom-right"

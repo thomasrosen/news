@@ -1,3 +1,4 @@
+import { Box } from "@/components/Box";
 import { MapCard } from "@/components/map/MapCard";
 import { MarkerPoint } from "@/components/map/MarkerPoint";
 import { EnhancedLink, EnhancedLinkButton } from "@/components/server/EnhancedLink";
@@ -7,6 +8,7 @@ import { cn } from "@/lib/utils";
 import type { MDXComponents } from 'mdx/types';
 import Image, { ImageProps } from 'next/image';
 import Link from "next/link";
+import { Suspense } from "react";
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -15,18 +17,18 @@ import Link from "next/link";
 
 export const components = {
   h2: ({ children }) => (
-    <h2 className="text-2xl font-bold mt-6 my-3">{children}</h2>
+    <h2 className="text-2xl font-bold mt-6">{children}</h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-xl font-bold mt-6 my-3">{children}</h3>
+    <h3 className="text-xl font-bold mt-6">{children}</h3>
   ),
   p: (props) => (
-    <div {...props} role="paragraph" className="my-3" />
+    <div {...props} role="paragraph" />
   ),
   img: (props) => {
     return <Image
       loader={imageLoader}
-      className="w-full h-auto my-4"
+      className="w-full h-auto object-cover"
       width={600}
       height={600}
       {...(props as ImageProps)}
@@ -39,18 +41,18 @@ export const components = {
     // return <a href={url_path_to_raw} target="_blank">
     //   <Image
     //     loader={imageLoader}
-    //     className="w-full h-auto my-4"
+    //     className="w-full h-auto"
     //     width={600}
     //     height={600}
     //     {...(props as ImageProps)}
     //   />
     // </a>
   },
-  a: async (props) => {
-    return <EnhancedLink {...props} />
+  a: (props) => {
+    return <Suspense><EnhancedLink {...props} /></Suspense>
   },
   Button: (props) => {
-    return <EnhancedLinkButton {...props} />
+    return <Suspense><EnhancedLinkButton {...props} /></Suspense>
   },
   Link: ({ className, ...props }) => {
     return <Link {...props} className={cn('transition-opacity hover:opacity-90', className)} />
@@ -69,17 +71,14 @@ export const components = {
       <pre className="whitespace-pre-wrap">{children}</pre>
     </Card>
   ),
-  Map: (props) => {
-    return <MapCard {...props} />
+  Map: async (props) => {
+    return <Suspense><MapCard {...props} /></Suspense>
   },
-  Point: (props) => {
-    return <MarkerPoint {...props} />
+  Point: async (props) => {
+    return <Suspense><MarkerPoint {...props} /></Suspense>
   },
-  Box: ({ children, wide = false, ...props }) => {
-    return <div {...props} role="group" className={cn('relative py-2 px-6 -mx-6 my-6', wide === false && 'bg-secondary')}>
-      {wide === true ? <div className="absolute inset-0 left-1/2 w-screen -translate-x-1/2 -z-1 bg-secondary" /> : null}
-      {children}
-    </div>
+  Box: (props) => {
+    return <Box {...props} />
   },
 } satisfies MDXComponents
 

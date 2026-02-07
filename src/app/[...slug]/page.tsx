@@ -108,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
           {formatDate(metadata.publishedAt)}
         </p>
       </div>
-      <article className="prose">
+      <article className="prose space-y-3">
         <Suspense fallback="Loading…">
           {content}
         </Suspense>
