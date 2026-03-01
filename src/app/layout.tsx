@@ -1,4 +1,5 @@
 import { MaterialIconStyle } from "@/components/Icon";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { baseUrl } from "@/constants";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,14 +21,16 @@ export default function RootLayout({
 
   return (<html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <div className="theme-bg" />
-        <main className="z-10 pb-96 max-w-xl mx-auto flex-auto min-w-0 mt-6 flex flex-col px-6">
-          {/* <Navbar /> */}
-          {children}
-          {/* <Footer /> */}
-        </main>
+        <TooltipProvider>
+          <div className="theme-bg" />
+          <main className="z-10 pb-96 max-w-xl mx-auto flex-auto min-w-0 mt-6 flex flex-col px-6">
+            {/* <Navbar /> */}
+            {children}
+            {/* <Footer /> */}
+          </main>
 
-        <MaterialIconStyle />
+          <MaterialIconStyle />
+        </TooltipProvider>
       </body>
     </html>
   );
